@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymleaf-extras-springsecurity5"
+      layout:decorate="~{layout/teamclick.html}"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>TeamMemberList</title>
+</head>
+<div layout:fragment="content">
+
+<body>
+
+<div class="row mt-3">
+    <div class="col">
+
+        <div class="card">
+            <div class="card-header">
+                팀원 명단
+            </div>
+            <div class="card-body" >
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">아이디</th>
+                        <th scope="col">이름</th>
+                        <th scope="col">이메일</th>
+                        <th scope="col">핸드폰번호</th>
+                        <th scope="col">성별</th>
+                        <th scope="col">지역</th>
+<!--                        <th scope="col">팀원강퇴</th>-->
+                    </tr>
+                    </thead>
+
+                    <tr th:each="memberListDTO:${memberListDTO}">
+                        <td>[[${memberListDTO.id}]]</td>
+                        <td>[[${memberListDTO.name}]]</td>
+                        <td>[[${memberListDTO.mail}]]</td>
+                        <td>[[${memberListDTO.phone}]]</td>
+                        <td>[[${memberListDTO.gender}]]</td>
+                        <td>[[${memberListDTO.memberLoc}]]</td>
+<!--                       <td> <form action="/main/team/removeteammember" method="post">-->
+<!--                            <input type="hidden" name="id" value="${memberListDTO.memberLoc}">-->
+<!--                            <input type="submit" value="강퇴s하기">-->
+
+<!--                        </form></td>-->
+                    </tr>
+                    </tbody>
+
+
+                </table>
+
+
+            </div><!--end card body-->
+        </div><!--end card-->
+    </div><!-- end col-->
+</div><!-- end row-->
+
+
+
+
+</body>
+</html>

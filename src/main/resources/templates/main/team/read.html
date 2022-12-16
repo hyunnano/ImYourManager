@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/teamclick.html}">
+
+
+<head>
+    <title>team Read</title>
+</head>
+
+<div layout:fragment="content">
+    <div class="row mt-3">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    Team Read
+                </div>
+                <div class="card-body">
+                    <form action="/main/team/teamjoin" method="post">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">팀고유번호</span>
+                        <input type="text" name="teamNum" class="form-control" th:value="${teamDTO.teamNum}" readonly>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">팀이름</span>
+                        <input type="text" name="teamName" class="form-control" th:value="${teamDTO.teamName}" readonly>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">팀리더</span>
+                        <input type="text" name="id" class="form-control" th:value="${teamDTO.id}" readonly>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">팀타입</span>
+                        <input type="text" name="teamType" class="form-control" th:value="${teamDTO.teamType}" readonly>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">팀평균나이</span>
+                        <input type="text" name="teamAge" class="form-control" th:value="${teamDTO.teamAge}" readonly>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">소개글</span>
+                        <textarea name="teamInfo" class="form-control col-sm-5" rows="5" readonly>[[${teamDTO.teamInfo}]]</textarea>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">팀활동지역</span>
+                        <input type="text" name="teamLocal1" class="form-control" th:value="${teamDTO.teamLocal1}" readonly>
+                        <input type="text" name="teamLocal2" class="form-control" th:value="${teamDTO.teamLocal2}" readonly>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">팀레벨</span>
+                        <input type="text" name="teamLevel" class="form-control" th:value="${teamDTO.teamLevel}" readonly>
+                    </div>
+                        <button type="submit">[[${teamDTO.teamName}]]에 가입하기</button>
+                    </form>
+                    <form action="/main/team/teammemberlist" method="get">
+                        <input type="hidden" name="teamNum" th:value="${teamDTO.teamNum}" readonly>
+                        <button type="submit">[[${teamDTO.teamName}]] 팀원 확인하기</button>
+                    </form>
+                    <div class="my-4" th:with="user=${#authentication.principal}">
+                        <div class="float-end" th:with="link = ${pageRequestDTO.getLink()}">
+                            <a th:href="|@{/main/team/list}?${link}|" class="text-decoration-none">
+                                <button type="button" class="btn btn-primary">팀 목록</button>
+                            </a>
+
+                            <a th:if="${user != null && user.username == teamDTO.id}" th:href="|@{/main/team/modify(teamNum=${teamDTO.teamNum})}&${link}|" class="text-decoration-none">
+                                <button type="button" class="btn btn-secondary">팀 정보 수정</button>
+                            </a>
+                        </div>
+                    </div>
+
+
+                </div><!--end card body-->
+            </div><!--end card-->
+        </div><!-- end col-->
+    </div><!-- end row-->
+
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    </div>
+</div><!-- layout fragment end -->
+
+
+<script layout:fragment="script" th:inline="javascript">
+
+    const currentUser = [[${#authentication.principal.username}]]
+
+    const joinBoardNum = [[${teamDTO.teamNum}]]
+
+
+    function printPages(data){ //페이지 목록 출력
+
+        //pagination
+        let pageStr = '';
+
+        if(data.prev) {
+            pageStr +=`<li class="page-item"><a class="page-link" data-page="${data.start-1}">PREV</a></li>`
+        }
+
+        for(let i = data.start; i <= data.end; i++){
+            pageStr +=`<li class="page-item ${i == data.page?"active":""} "><a class="page-link" data-page="${i}">${i}</a></li>`
+        }
+
+        if(data.next) {
+            pageStr +=`<li class="page-item"><a class="page-link" data-page="${data.end +1}">NEXT</a></li>`
+        }
+        replyPaging.innerHTML = pageStr
+    }
+</script>
+</html>

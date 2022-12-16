@@ -1,0 +1,12 @@
+	#mypage {
+	margin: 150px
+}
+
+#my {
+	background-color: aliceblue;
+	width: 500px;
+	height: 450px;
+	margin: 30px auto;
+	padding: 20px;
+	text-align: center;
+}

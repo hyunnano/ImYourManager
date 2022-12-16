@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Schedule</title>
+
+  <!-- jquery CDN -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <!-- fullcalendar CDN -->
+  <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />   <!--css먼저 적어주기-->
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
+  <!-- fullcalendar 언어 CDN -->
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/locales-all.min.js'></script>
+
+  <!--TimePicker -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+  <!--datepicker-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.4/js/bootstrap-datetimepicker.min.js"></script>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.4/css/bootstrap-datetimepicker.min.css">
+
+  <style>
+    .fc-toolbar-chunk {
+      display: flex;      // 일렬로 나란히
+    align-items: center; // 수직 가운데 정렬
+    }
+    /* 일요일 날짜 빨간색*/
+    .fc-day-sun a {
+      color: red;
+      text-decoration: none;
+    }
+    /* 토요일 날짜 파란색 */
+    .fc-day-sat a {
+      color: blue;
+      text-decoration: none;
+    }
+  </style>
+  <!--모달창 스타일-->
+  <style>
+    #my_modal {
+      display: none;
+      width: 600px;
+      padding: 20px 60px;
+      background-color: #fefefe;
+      border: 1px solid #888;
+      border-radius: 3px;
+    }
+
+    #my_modal .modal_close_btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+  </style>
+  <!--일정 등록 폼 스타일-->
+  <style>
+    #container {
+      width: 600px;
+      margin: 50px auto;
+    }
+
+    h2 {
+      margin: 0 auto;
+    }
+
+    label {
+      width: 80px;
+      float: left;
+      font-weight: bold;
+    }
+
+    ul>li {
+      list-style: none;
+      margin: 10px;
+      line-height: 50px;
+    }
+
+    .buttons {
+      width: 100%;
+      margin-top: 20px;
+      text-align: center;
+      display: inline-block;
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {   // resources 다 업로드 한후 이문장 이후에 내용작성
+
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        googleCalendarApiKey: 'AIzaSyBa6ljJAzeR7MfYWgRQZ_tPFpNwPZr73h0',
+        initialView: 'dayGridMonth',
+        views: {
+          dayGridMonth: {buttonText: '달력'},
+          listMonth: {buttonText: '목록'},
+          customButtons: 'addEventButton'
+        },
+        titleFormat: function(date) { // title 설정
+          return date.date.year +"년 "+(date.date.month +1)+"월";
+        }  ,
+        headerToolbar: {
+          right: 'dayGridMonth,listMonth',
+          center: 'prev title next',
+          left: 'addEventButton'
+        },
+        eventTimeFormat: { // like '14:30:00',
+          hour: 'numeric',
+          minute: '2-digit',
+          meridiem: false
+        },
+        eventSources: [
+          {
+            googleCalendarId: 'darkelfmuy@gmail.com'
+          }, {
+            googleCalendarId: 'ko.south_korea#holiday@group.v.calendar.google.com',
+            className: 'ko_event',
+            color: 'white',
+            textColor: 'red',
+          }],
+        displayEventTime: true,
+        displayEventEnd: true,
+        footerToolbar: {
+          right: 'today'
+        },
+        interactive:true,
+        // dateClick:function (arg){
+        //      modal('my_modal');
+        //     const start_time1 = document.getElementById('start_time').getHours();
+        //     const start_time2 = document.getElementById('start_time').getMinutes();
+        //     const end_time1= document.getElementById('end_time').getHours();
+        //     const end_time2 = document.getElementById('end_time').getMinutes();
+        //     const ground = document.getElementById('ground').val;
+        //     const type = document.getElementsByName('p_type').values().toString();
+        //
+        //     calendar.addEvent({
+        //         title: ground,
+        //         start: arg.start+"T"+start_time1+":"+start_time2,
+        //         end: arg.end+"T"+end_time1+":"+end_time2,
+        //         extendedProps:{
+        //             p_type:type
+        //         }
+        //     });
+        //     calendar.unselect();
+        // },
+        customButtons: {   //사용자 정의로 생성된 버튼
+          addEventButton: {
+            text: '일정등록',
+            click: function (arg){
+              // opens events in a popup window
+              window.open('https://calendar.google.com/calendar','', 'width=1000,height=700');
+
+              arg.jsEvent.preventDefault() // don't navigate in main tab
+
+              //             modal('my_modal');
+              //             const day = arg.start
+              //             const start_time = document.getElementById('start_time');
+              //             const end_time= document.getElementById('end_time');
+              //             const ground = document.getElementById('ground');
+              //             // const  type= document.getElementsByName('p_type').values();
+              //             calendar.addEvent({
+              //                 title: ground,
+              //                 start: day+'T'+start_time,
+              //                 end: day+'T'+end_time,
+              //
+              //             });
+              //             console.log(start_time);
+              //             calendar.unselect();
+            }
+          }
+        },
+        droppable: true,
+        editable: true,
+        selectable:true
+      });
+      calendar.render();
+    });
+    <!--================================================================================-->
+    function modal(id) {
+      const zIndex = 9999;
+      const modal = $('#' + id);
+
+      // 모달 div 뒤에 희끄무레한 레이어
+      const bg = $('<div>')
+              .css({
+                position: 'fixed',
+                zIndex: zIndex,
+                left: '0px',
+                top: '0px',
+                width: '100%',
+                height: '100%',
+                overflow: 'auto',
+                // 레이어 색갈은 여기서 바꾸면 됨
+                backgroundColor: 'rgba(0,0,0,0.4)'
+              })
+              .appendTo('body');
+
+      modal
+              .css({
+                position: 'fixed',
+                boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
+                // 시꺼먼 레이어 보다 한칸 위에 보이기
+                zIndex: zIndex + 1,
+
+                // div center 정렬
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                msTransform: 'translate(-50%, -50%)',
+                webkitTransform: 'translate(-50%, -50%)'
+              })
+              .show()
+              // 닫기 버튼 처리, 시꺼먼 레이어와 모달 div 지우기
+              .find('#x')
+              .on('click', function() {
+                bg.remove();
+                modal.hide();
+              });
+    }
+    // datepicker
+    $(function (){
+      $('.datepicker').datepicker({
+        format:'Y-m-d',
+        lang:'ko',
+        minDate:0
+      })
+    });
+    //timepicker
+    $(function (){
+      $('#start_time').timepicker({
+        timeFormat: 'h:mm p',
+        interval: 30,
+        dropdown: true,
+        scrollbar:true,
+        minTime:'24:00',
+        dynamic:true,
+        onClose:function (selectedTime){   //시간선택 됐을 때
+          $('#end_time').timepicker('option','minTime',selectedTime);  // 종료시간의 minTime 옵션을 selectedTime으로 지정.
+        }
+      });
+      $('#end_time').timepicker({
+        timeFormat: 'h:mm p',
+        interval: 30,
+        dropdown: true,
+        scrollbar:true,
+        onClose:function (selectedTime){
+          $('#start_time').timepicker('option','maxTime',selectedTime);  //선택된 시간을 시작시간의 maxTime으로 지정
+        }
+      });
+    });
+  </script>
+
+</head>
+<!--<h1 style="text-align: center">일정 관리</h1>-->
+<body>
+<div id='calendar' ></div>
+
+<!--<div id="my_modal">-->
+<!--    <form >-->
+<!--        <div id="container">-->
+<!--            <fieldset>-->
+<!--                <legend>-->
+<!--                    <h2>일정 등록</h2>-->
+<!--                </legend>-->
+<!--                <ul>-->
+<!--&lt;!&ndash;                    <li><label for="day">날 짜</label> <input type='text' class='datepicker' id='day' name= 'day' style='width:140px;'required></li>&ndash;&gt;-->
+<!--                    <li><label for="time">시간</label>-->
+<!--                        <input class="timepicker" type="text" id="start_time"  name="scheduleStartTime"  required placeholder="시작시간">-->
+<!--                        ~ <input class="timepicker" type="text" id="end_time" name="scheduleEndTime"  required placeholder="종료시간"></li>-->
+
+<!--                    <li><label for="ground">장 소</label> <input type="text"-->
+<!--                                                               id="ground" placeholder="ex)영등포공원 풋살장" required>-->
+<!--&lt;!&ndash;                    <li ><label  name="p_type">경기종류</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <input type="radio" class="p_type" value="자체전" checked><span>자체전</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <input type="radio" class="p_type" value="매치"><span>매칭</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </li>&ndash;&gt;-->
+<!--                </ul>-->
+<!--            </fieldset>-->
+<!--            <div class="buttons">-->
+<!--                <button type="submit" onclick="addEventListener()">등 록</button>-->
+<!--                <button type="reset" id="x">취 소</button>-->
+<!--            </div>-->
+
+<!--        </div>-->
+<!--    </form>-->
+<!--&lt;!&ndash;    <a class="modal_close_btn">닫기</a>&ndash;&gt;-->
+<!--</div>-->
+</body>
+</html>

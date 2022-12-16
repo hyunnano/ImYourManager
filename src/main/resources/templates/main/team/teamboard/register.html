@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/teamclick.html}">
+
+
+<head>
+  <title>팀 자유게시판 글 등록</title>
+</head>
+
+<div layout:fragment="content">
+  <div class="row mt-3">
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
+          팀 자유게시판 글 등록
+        </div>
+        <div class="card-body">
+          <form action="/main/team/teamboard/register" method="post">
+            <div class="input-group mb-3">
+              <span class="input-group-text">제 목</span>
+              <input type="text" name="teamBoardTitle" class="form-control" placeholder="Title">
+            </div>
+
+            <div class="input-group mb-3">
+              <span class="input-group-text">글 내용</span>
+              <textarea class="form-control col-sm-5" rows="5" name="teamBoardContent"></textarea>
+            </div>
+
+            <div class="input-group mb-3">
+              <span class="input-group-text">아이디</span>
+              <input type="text" name="id" class="form-control" placeholder="Writer"
+                     th:value="${#authentication.principal.username}" readonly>
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text">조회수</span>
+              <input type="number" name="teamBoardVisitCount" class="form-control" value=0 readonly>
+            </div>
+
+
+            <!--            <div class="input-group mb-3">-->
+<!--              <span class="input-group-text">Images</span>-->
+<!--              <div class="float-end uploadHidden">-->
+<!--                <button type="button" class="btn btn-primary uploadFileBtn">ADD Files</button>-->
+<!--              </div>-->
+<!--            </div>-->
+
+            <div class="my-4">
+              <div class="float-end">
+                <button type="submit" class="btn btn-primary submitBtn">작성완료</button>
+                <button type="reset" class="btn btn-secondary">다시쓰기</button>
+              </div>
+            </div>
+
+
+          </form>
+        </div><!--end card body-->
+
+      </div><!--end card-->
+    </div><!-- end col-->
+  </div><!-- end row-->
+
+<!--  <!—- 첨부 파일 섬네일을 보여줄 부분 &ndash;&gt;-->
+<!--  <div class="row mt-3">-->
+<!--    <div class="col ">-->
+<!--      <div class="container-fluid d-flex uploadResult" style="flex-wrap: wrap;">-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+  <!—- 첨부파일 추가를 위한 모달창 -->
+<!--  <div class="modal uploadModal" tabindex="-1">-->
+<!--    <div class="modal-dialog">-->
+<!--      <div class="modal-content">-->
+<!--        <div class="modal-header">-->
+<!--          <h5 class="modal-title">Upload File</h5>-->
+<!--          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--        </div>-->
+<!--        <div class="modal-body">-->
+<!--          <div class="input-group mb-3">-->
+<!--            <input type="file" name="files" class="form-control" multiple >-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="modal-footer">-->
+<!--          <button type="button" class="btn btn-primary uploadBtn">Upload</button>-->
+<!--          <button type="button" class="btn btn-outline-dark closeUploadBtn" >Close</button>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>&lt;!&ndash; register modal &ndash;&gt;-->
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <script src="/js/upload.js"></script>
+
+</div><!-- layout fragment end -->
+

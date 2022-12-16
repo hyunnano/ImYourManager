@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
+
+<head>
+    <title>NoticeBoard Modify</title>
+</head>
+
+<div layout:fragment="content">
+    <div class="row mt-3">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    공지사항 수정
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/main/notice/modify}" method="post" id="f1">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">글번호</span>
+                            <input type="text" class="form-control" th:value="${noticeBoardDTO.noticeBoardNum}" name="noticeBoardNum" readonly>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">제목</span>
+                            <input type="text" class="form-control" name="noticeTitle" th:value="${noticeBoardDTO.noticeTitle}">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">내용</span>
+                            <textarea class="form-control col-sm-5" rows="5" name="noticeContent">[[${noticeBoardDTO.noticeContent}]]</textarea>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">작성자</span>
+                            <input type="text" class="form-control" th:value="${noticeBoardDTO.id}" name="id" readonly>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">조회수</span>
+                            <input type="text" class="form-control" name="noticeVisitCount" th:value="${noticeBoardDTO.noticeVisitCount}" readonly>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">작성일</span>
+                            <input type="text" class="form-control" th:value="${#temporals.format(noticeBoardDTO.regDate, 'yyyy-MM-dd HH:mm:ss')}" readonly>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">수정일</span>
+                            <input type="text" class="form-control" th:value="${#temporals.format(noticeBoardDTO.modDate, 'yyyy-MM-dd HH:mm:ss')}" readonly>
+                        </div>
+
+                        <div class="my-4">
+                            <div class="float-end">
+                                <button type="button" class="btn btn-primary listBtn">목록으로</button>
+                                <button type="button" class="btn btn-secondary modBtn">수정하기</button>
+                                <button type="button" class="btn btn-danger removeBtn">삭제하기</button>
+                            </div>
+                        </div>
+                    </form>
+
+
+                </div><!--end card body-->
+            </div><!--end card-->
+        </div><!-- end col-->
+    </div><!-- end row-->
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</div><!--end layout fragement-->
+
+<script layout:fragment="script" th:inline="javascript">
+
+
+    const errors = [[${errors}]]
+    console.log(errors)
+
+    let errorMsg = ''
+
+    if(errors){
+        for (let i = 0; i < errors.length; i++) {
+            errorMsg += `${errors[i].field}은(는) ${errors[i].code} \n`
+        }
+        history.replaceState({}, null, null)
+        alert(errorMsg)
+    }
+
+    const link = [[${pageRequestDTO.getLink()}]]
+    const formObj = document.querySelector("#f1")
+
+    document.querySelector(".modBtn").addEventListener("click", function(e){
+        e.preventDefault()
+        e.stopPropagation()
+
+        formObj.action = `/main/notice/modify?${link}`
+        formObj.method ='post'
+        formObj.submit()
+
+
+    }, false)
+
+    document.querySelector(".removeBtn").addEventListener("click", function(e){
+        e.preventDefault()
+        e.stopPropagation()
+
+        formObj.action = `/main/notice/remove`
+        formObj.method ='post'
+        formObj.submit()
+    }, false)
+
+    document.querySelector(".listBtn").addEventListener("click", function(e){
+        e.preventDefault()
+        e.stopPropagation()
+
+        formObj.reset()
+        self.location =`/main/notice/list?${link}`
+
+    }, false)
+
+</script>
+

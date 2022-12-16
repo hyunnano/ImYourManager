@@ -1,0 +1,85 @@
+buildscript {
+    ext{
+        queryDslVersion= "5.0.0"
+    }
+}
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.3'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" //dsl 추가
+}
+
+
+group = 'net.manager'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' }
+    maven { url 'https://repo.spring.io/snapshot' }
+}
+
+def querydslDir = "$buildDir/generated/querydsl"//추가
+querydsl{//추가
+    jpa= true
+    querydslSourcesDir = querydslDir
+}
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    //test때 사용하는 롬복
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0'
+
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"//QueryDSL
+    implementation "com.querydsl:querydsl-apt:${queryDslVersion}"//추가코드
+
+    implementation 'org.modelmapper:modelmapper:3.1.0'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-security' //스프링 부트 로그인 보안관련 프레임워크
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5' //타임리프에서 인증정보를 사용하기 위해서 사용한다.
+
+    implementation group: 'org.json', name: 'json', version: '20090211'
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+sourceSets {
+    main.java.srcDir querydslDir//추가하면 domain에 Q클래스가 추가된다.
+//    main{
+//        java {
+//            srcDirs = ["$projectDir/src/main/java", "$projectDir/build/generated"]
+//        }
+//    }
+}
+compileQuerydsl{//추가
+    options.annotationProcessorPath = configurations.querydsl
+}
+
+configurations {//추가
+    compileOnly{
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
+}

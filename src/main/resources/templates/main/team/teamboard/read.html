@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layout/teamclick.html}">
+
+
+<head>
+    <title>TeamBoard Read</title>
+</head>
+
+<div layout:fragment="content">
+    <div class="row mt-3">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    팀 자유게시판 상세보기
+                </div>
+                <div class="card-body">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">글번호</span>
+                        <input type="text" class="form-control" th:value="${teamBoardDTO.teamBoardNum}" readonly>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">제목</span>
+                        <input type="text" class="form-control" th:value="${teamBoardDTO.teamBoardTitle}" readonly>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Content</span>
+                        <textarea class="form-control col-sm-5" rows="5" readonly>[[${teamBoardDTO.teamBoardContent}]]</textarea>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">아이디</span>
+                        <input type="text" class="form-control" th:value="${teamBoardDTO.id}" readonly>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">작성일</span>
+                        <input type="text" class="form-control" th:value="${#temporals.format(teamBoardDTO.regDate, 'yyyy-MM-dd HH:mm:ss')}" readonly>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">수정일</span>
+                        <input type="text" class="form-control" th:value="${#temporals.format(teamBoardDTO.modDate, 'yyyy-MM-dd HH:mm:ss')}" readonly>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">방문수</span>
+                        <input type="text" class="form-control" th:value="${teamBoardDTO.teamBoardVisitCount}" readonly>
+                    </div>
+
+                    <div class="my-4" th:with="user=${#authentication.principal}">
+                        <div class="float-end" th:with="link = ${pageRequestDTO.getLink()}">
+                            <a th:href="|@{/main/team/teamboard/list}?${link}|" class="text-decoration-none">
+                                <button type="button" class="btn btn-primary">목록으로</button>
+                            </a>
+                            <a th:if="${user != null && user.username == teamBoardDTO.id}" th:href="|@{/main/team/teamboard/modify(teamBoardNum=${teamBoardDTO.teamBoardNum})}&${link}|" class="text-decoration-none">
+                                <button type="button" class="btn btn-secondary">수정하기</button>
+                            </a>
+                        </div>
+                    </div>
+
+
+                </div><!--end card body-->
+
+
+            </div><!--end card-->
+        </div><!-- end col-->
+    </div><!-- end row-->
+
+    <!-- end regist modal -->
+
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+
+    </div>
+</div><!-- layout fragment end -->
+
+
+<script layout:fragment="script" th:inline="javascript">
+
+    const currentUser = [[${#authentication.principal.username}]]
+
+    const teamBoardNum = [[${teamBoardDTO.teamBoardNum}]]
+
+
+
+    function printPages(data){ //페이지 목록 출력
+
+        //pagination
+        let pageStr = '';
+
+        if(data.prev) {
+            pageStr +=`<li class="page-item"><a class="page-link" data-page="${data.start-1}">PREV</a></li>`
+        }
+
+        for(let i = data.start; i <= data.end; i++){
+            pageStr +=`<li class="page-item ${i == data.page?"active":""} "><a class="page-link" data-page="${i}">${i}</a></li>`
+        }
+
+        if(data.next) {
+            pageStr +=`<li class="page-item"><a class="page-link" data-page="${data.end +1}">NEXT</a></li>`
+        }
+        replyPaging.innerHTML = pageStr
+    }
+
+
+
+
+</script>
+

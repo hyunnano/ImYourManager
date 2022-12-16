@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
+
+<head>
+    <title>Member Modify</title>
+</head>
+
+<body class="align-middle">
+<div layout:fragment="content">
+    <div class="container-fluid d-flex justify-content-center" style="height: 100vh">
+        <div class="card align-self-center">
+            <div class="card-header">
+                마이페이지
+            </div>
+            <form th:action="@{member/modify}" method="post" id="registerForm">
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">아이디</span>
+                    <input type="text" class="form-control" th:value="${memberDTO.id}" name="id" readonly>
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">비밀번호</span>
+                    <input type="password" name="pass" class="form-control"
+                           pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{5,15}$"
+                           placeholder="영문 대소문자, 숫자, 특수문자를 포함(5~15자리)">
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">EMAIL</span>
+                    <input type="email" class="form-control" th:value="${memberDTO.mail}" name="mail">
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">이름</span>
+                    <input type="text" class="form-control" th:value="${memberDTO.name}" name="name" readonly>
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">활동지역</span>
+                    <input type="text" class="form-control" th:value="${memberDTO.memberLoc}" name="memberLoc">
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">전화번호</span>
+                    <input type="tel" class="form-control" th:value="${memberDTO.phone}" name="phone" pattern="^[0-9]+$">
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">성별</span>
+                    <input type="text" class="form-control" th:value="${memberDTO.gender}" name="gender" readonly>
+                </div>
+
+                <div class="my-4">
+                    <div class="float-end">
+                        <button type="button" class="btn btn-secondary modBtn">수정</button>
+                        <button type="button" class="btn btn-danger removeBtn">탈퇴</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</div><!--end layout fragement-->
+</body>
+
+<script layout:fragment="script" th:inline="javascript">
+
+    const formObj = document.querySelector("#registerForm")
+
+    document.querySelector(".modBtn").addEventListener("click", function (e) {
+        e.preventDefault()
+        e.stopPropagation()
+
+        formObj.action = `/member/modify`
+        formObj.method = 'post'
+        formObj.submit()
+
+
+    }, false)
+
+    document.querySelector(".removeBtn").addEventListener("click", function (e) {
+        e.preventDefault()
+        e.stopPropagation()
+
+        formObj.action = `/member/remove`
+        formObj.method = 'post'
+        formObj.submit()
+    }, false)
+
+</script>
+</html>

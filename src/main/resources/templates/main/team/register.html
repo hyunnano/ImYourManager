@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/basic.html}">+
+<meta charset="utf-8" />
+<head>
+  <title>Team Register Page</title>
+</head>
+
+<div layout:fragment="content">
+  <div class="row mt-3">
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
+          팀 등록
+        </div>
+        <div class="card-body">
+          <form id="registerForm" action="/main/team/register" method="post">
+            <div class="input-group mb-3">
+              <span class="input-group-text">팀이름</span>
+              <input type="text" name="teamName" class="form-control">
+            </div>
+
+            <div class="input-group mb-3">
+              <span class="input-group-text">나이대</span>
+              <input type="text" name="teamAge" class="form-control">
+            </div>
+
+            <div class="input-group mb-3">
+              <span class="input-group-text">팀유형</span>
+              <input type="text" name="teamType" class="form-control">
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text">팀지역</span>
+              <input type="text" name="teamLocal1" class="form-control">
+              <input type="text" name="teamLocal2" class="form-control">
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text">팀레벨</span>
+              <input type="text" name="teamLevel" class="form-control">
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text">팀소개</span>
+              <input type="text" name="teamInfo" class="form-control">
+            </div>
+            <div class="my-4">
+              <div class="float-end">
+                <button type="submit" class="btn btn-primary submitBtn">작성완료</button>
+                <button type="reset" class="btn btn-secondary">다시하기</button>
+              </div>
+            </div>
+          </form>
+        </div><!--end card body-->
+
+      </div><!--end card-->
+    </div><!-- end col-->
+  </div><!-- end row-->
+
+
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+
+    const error = [[${error}]]
+
+    if(error && error === 'mid'){
+        alert("동일한 MID를 가진 계정이 존재합니다.")
+    }
+
+
+</script>

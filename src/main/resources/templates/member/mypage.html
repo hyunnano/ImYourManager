@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
+
+<head>
+    <title>Member Read</title>
+</head>
+
+<body class="align-middle">
+<div layout:fragment="content">
+    <div class="container-fluid d-flex justify-content-center" style="height: 100vh">
+        <div class="card align-self-center">
+            <div class="card-header">
+                마이페이지
+            </div>
+            <form id="registerForm">
+                <div class="input-group mb-3">
+                    <span class="input-group-text">아이디</span>
+                    <input type="text" class="form-control" th:value="${memberDTO.id}" readonly>
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">EMAIL</span>
+                    <input type="email" class="form-control" th:value="${memberDTO.mail}" readonly>
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">이름</span>
+                    <input type="text" class="form-control" th:value="${memberDTO.name}" readonly>
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">활동지역</span>
+                    <input type="text" class="form-control" th:value="${memberDTO.memberLoc}" readonly>
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">전화번호</span>
+                    <input type="text" class="form-control" th:value="${memberDTO.phone}" readonly>
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">성별</span>
+                    <input type="text" class="form-control" th:value="${memberDTO.gender}" readonly>
+                </div>
+
+                <div>
+                    <a th:href="|@{/member/modify(id=${memberDTO.id})}&${link}|" class="text-decoration-none">
+                        <button type="button" class="btn btn-secondary">수정</button>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

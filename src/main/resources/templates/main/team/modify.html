@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/teamclick.html}">
+
+<head>
+    <title>팀 변경</title>
+</head>
+
+<div layout:fragment="content">
+    <div class="row mt-3">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    팀 수정
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/main/team/modify}" method="post" id="f1">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">팀번호</span>
+                            <input type="text" class="form-control" th:value="${teamDTO.teamNum}" name="teamNum" readonly>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">팀이름</span>
+                            <input type="text" class="form-control" name="teamName" th:value="${teamDTO.teamName}">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">팀리더</span>
+                            <input type="text" class="form-control" th:value="${teamDTO.id}" name="id" readonly>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">팀타입</span>
+                            <input type="text" class="form-control" name="teamType" th:value="${teamDTO.teamType}">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">팀평균나이</span>
+                            <input type="text" class="form-control" name="teamAge" th:value="${teamDTO.teamAge}">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">소개글</span>
+                            <textarea class="form-control col-sm-5" rows="5" name="teamInfo">[[${teamDTO.teamInfo}]]</textarea>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">팀활동지역</span>
+                            <input type="text" name="teamLocal1" class="form-control" th:value="${teamDTO.teamLocal1}" >
+                            <input type="text" name="teamLocal2" class="form-control" th:value="${teamDTO.teamLocal2}" >
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">팀레벨</span>
+                            <input type="text" name="teamLevel" class="form-control" th:value="${teamDTO.teamLevel}">
+                        </div>
+
+
+                        <div class="my-4">
+                            <div class="float-end">
+                                <button type="button" class="btn btn-primary listBtn">목록으로</button>
+                                <button type="button" class="btn btn-secondary modBtn">수정하기</button>
+                                <button type="button" class="btn btn-danger removeBtn">삭제하기</button>
+                            </div>
+                        </div>
+                    </form>
+
+
+                </div><!--end card body-->
+            </div><!--end card-->
+        </div><!-- end col-->
+    </div><!-- end row-->
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+
+</div><!--end layout fragement-->
+
+<script layout:fragment="script" th:inline="javascript">
+
+
+    const errors = [[${errors}]]
+    console.log(errors)
+
+    let errorMsg = ''
+
+    if(errors){
+        for (let i = 0; i < errors.length; i++) {
+            errorMsg += `${errors[i].field}은(는) ${errors[i].code} \n`
+        }
+        history.replaceState({}, null, null)
+        alert(errorMsg)
+    }
+
+    const link = [[${pageRequestDTO.getLink()}]]
+    const formObj = document.querySelector("#f1")
+
+    document.querySelector(".modBtn").addEventListener("click", function(e){
+        e.preventDefault()
+        e.stopPropagation()
+
+        formObj.action = `/main/team/modify?${link}`
+        formObj.method ='post'
+        formObj.submit()
+    }, false)
+
+    document.querySelector(".removeBtn").addEventListener("click", function(e){
+        e.preventDefault()
+        e.stopPropagation()
+
+
+        formObj.action = `/main/team/remove`
+        formObj.method ='post'
+        formObj.submit()
+    }, false)
+
+    document.querySelector(".listBtn").addEventListener("click", function(e){
+        e.preventDefault()
+        e.stopPropagation()
+
+        formObj.reset()
+        self.location =`/main/team/list?${link}`
+
+    }, false)
+
+
+</script>
+

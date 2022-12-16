@@ -1,0 +1,122 @@
+@charset "UTF-8";
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-size: 14px;
+	font-family: "맑은 고딕", 나눔고딕, 돋움, sans-serif;
+}
+
+#container {
+	width: 100%;
+	text-align: center;
+}
+
+.title {
+	
+	width: 750px;
+	margin: auto;
+	height: 100px;
+	position: relative;
+	margin-top: 50px;
+}
+
+.title a {
+	color: #000;
+	text-decoration: none;
+	cursor: pointer;
+	
+	font-weight: 700;
+	line-height: 100px;
+	font-size: xx-large;
+}
+
+.title label {
+	width: 200px;
+	
+	line-height: 100px;
+	font-weight: 900;
+	font-size: xx-large;
+}
+
+.title a:active, a:hover {
+	text-decoration: underline;
+	color: #F28011;
+}
+.title button{
+	width: 40px;
+	height: 25px;
+	position:absolute; 
+	bottom:10px; 
+	right:0;
+}
+
+
+.calendar {
+	margin:  auto;
+}
+
+.calendar table {
+	width: 750px;
+	border-collapse: collapse;
+	border-spacing: 0;
+	border: 2px #000;
+	margin: 0 auto;
+}
+
+.calendar table thead tr:first-child {
+	background: #f5f3f3;
+}
+
+.calendar table td {
+	height: 100px;
+	padding: 10px;
+	text-align: right;
+	border: 1px solid #ccc;
+}
+
+.calendar table th {
+	width: 80px;
+	height: 80px;
+	padding: 10px;
+	text-align: center;
+	border: 1px solid #ccc;
+	font-size: larger;
+	font-weight: bolder;
+}
+
+.calendar table th:nth-child(7n+1) {
+	color: red;
+}
+
+.calendar table th:nth-child(7n) {
+	color: blue;
+}
+
+.calendar table td.gray {
+	color: #ccc;
+}
+
+.calendar table td.today {
+	font-weight: 700;
+	background: #E6FFFF;
+}
+
+
+.calendar .focus{
+	width: 750px;
+	margin: auto;
+	height: 50px;
+	position: relative;
+}
+.calendar .focus a{
+	width:100px;
+	height:30px;
+	position:absolute; 
+	bottom:0px; 
+	right:0;
+}
